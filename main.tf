@@ -5,7 +5,7 @@
 resource "aws_security_group" "openvpn" {
   name        = "${var.name}"
   vpc_id      = "${var.vpc_id}"
-  description = "OpenVPN security group"
+  description = "${var.name} security group for OpenVPN"
 
   tags {
     Name = "${var.name}"
@@ -24,19 +24,19 @@ resource "aws_security_group" "openvpn" {
     protocol    = "tcp"
     from_port   = 22
     to_port     = 22
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["${var.my_ip}"]
   }
   ingress {
     protocol    = "tcp"
     from_port   = 443
     to_port     = 443
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["${var.my_ip}"]
   }
   ingress {
     protocol    = "udp"
     from_port   = 1194
     to_port     = 1194
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["${var.my_ip}"]
   }
   egress {
     protocol    = -1
@@ -89,7 +89,7 @@ USERDATA
 }
 
 resource "aws_elb" "openvpn" {
-  name                        = "openvpn-elb"
+  name                        = "${var.name}-elb"
   subnets                     = ["${var.public_subnet_ids}"]
   internal                    = false
   idle_timeout                = 30
@@ -115,7 +115,7 @@ resource "aws_elb" "openvpn" {
   }
 
   tags {
-    Name = "openvpn-elb"
+    Name = "${var.name}-elb"
   }
 }
 

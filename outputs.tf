@@ -7,7 +7,7 @@ output "private_ip" {
 }
 
 output "public_ip" {
-  value = "${aws_ip.openvpn.public_ip}"
+  value = "${aws_eip.openvpn.public_ip}"
 }
 
 output "public_web_fqdn" {

@@ -136,5 +136,10 @@ resource "aws_route53_record" "openvpn" {
   name    = "vpn.${var.domain_name}"
   type    = "A"
   ttl     = 300
-  records = ["${aws_instance.openvpn.public_ip}"]
+  records = ["${aws_eip.openvpn.public_ip}"]
+}
+
+resource "aws_eip" "openvpn" {
+  instance = "${aws_instance.openvpn.id}"
+  vpc      = true
 }

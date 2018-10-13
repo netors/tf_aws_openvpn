@@ -3,7 +3,9 @@
 #----------------------------------------------------------------
 
 resource "aws_security_group" "openvpn" {
-  ignore_changes = ["tags"]
+  lifecycle {
+    ignore_changes = ["tags"]
+  }
   name        = "${var.name}"
   vpc_id      = "${var.vpc_id}"
   description = "${var.name} security group for OpenVPN"
@@ -48,7 +50,9 @@ resource "aws_security_group" "openvpn" {
 }
 
 resource "aws_instance" "openvpn" {
-  ignore_changes = ["tags"]
+  lifecycle {
+    ignore_changes = ["tags"]
+  }
   ami           = "${var.ami}"
   instance_type = "${var.instance_type}"
   key_name      = "${var.key_name}"
@@ -91,7 +95,9 @@ USERDATA
 }
 
 resource "aws_elb" "openvpn" {
-  ignore_changes = ["tags"]
+  lifecycle {
+    ignore_changes = ["tags"]
+  }
   name                        = "${var.name}-elb"
   subnets                     = ["${var.public_subnet_ids}"]
   internal                    = false
@@ -123,7 +129,9 @@ resource "aws_elb" "openvpn" {
 }
 
 resource "aws_route53_record" "openvpn-web" {
-  ignore_changes = ["tags"]
+  lifecycle {
+    ignore_changes = ["tags"]
+  }
   zone_id = "${var.route_zone_id}"
   name    = "vpn-web.${var.domain_name}"
   type    = "A"
@@ -136,7 +144,9 @@ resource "aws_route53_record" "openvpn-web" {
 }
 
 resource "aws_route53_record" "openvpn" {
-  ignore_changes = ["tags"]
+  lifecycle {
+    ignore_changes = ["tags"]
+  }
   zone_id = "${var.route_zone_id}"
   name    = "vpn.${var.domain_name}"
   type    = "A"
@@ -145,7 +155,9 @@ resource "aws_route53_record" "openvpn" {
 }
 
 resource "aws_eip" "openvpn" {
-  ignore_changes = ["tags"]
+  lifecycle {
+    ignore_changes = ["tags"]
+  }
   instance = "${aws_instance.openvpn.id}"
   vpc      = true
 }
